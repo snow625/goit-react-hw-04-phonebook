@@ -1,3 +1,4 @@
+import { memo } from "react";
 import PropTypes from "prop-types";
 import s from "./filter.module.css";
 const Filter = ({ onChange }) => {
@@ -19,4 +20,4 @@ Filter.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default Filter;
+export default memo(Filter);

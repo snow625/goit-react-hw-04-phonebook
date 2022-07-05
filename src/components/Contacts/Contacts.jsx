@@ -2,11 +2,19 @@ import PropTypes from "prop-types";
 import ContactItem from "./ContactItem";
 import s from "./contacts.module.css";
 function Contacts({ items, onClick }) {
-  return (
-    <ul className={s.list}>
-      <ContactItem items={items} onClick={onClick} />
-    </ul>
-  );
+  const elements = items.map((el) => {
+    const { number, name, id } = el;
+    return (
+      <ContactItem
+        key={id}
+        id={id}
+        onClick={onClick}
+        number={number}
+        name={name}
+      />
+    );
+  });
+  return <ul className={s.list}>{elements}</ul>;
 }
 Contacts.defaultProps = {
   items: [],

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 import Contacts from "./components/Contacts";
 import ContactForm from "./components/ContactForm";
@@ -41,24 +41,30 @@ const App = () => {
     }
   }, [contacts]);
 
-  const addPhoneName = (obj) => {
-    const isInclude = contacts.find(
-      ({ name }) => name.toLowerCase() === obj.name.toLowerCase()
-    );
-    if (!isInclude) {
-      const newObj = { id: nanoid(), ...obj };
-      setContacts((prevState) => {
-        return [...prevState, newObj];
-      });
+  const addPhoneName = useCallback(
+    (obj) => {
+      const isInclude = contacts.find(
+        ({ name }) => name.toLowerCase() === obj.name.toLowerCase()
+      );
+      if (!isInclude) {
+        const newObj = { id: nanoid(), ...obj };
+        setContacts((prevState) => {
+          return [...prevState, newObj];
+        });
+        return;
+      }
+      alert(`${isInclude.name} is already in contacts`);
       return;
-    }
-    alert(`${isInclude.name} is already in contacts`);
-    return;
-  };
+    },
+    [setContacts]
+  );
 
-  const changeFilterState = ({ target: { value } }) => {
-    setFilter(value);
-  };
+  const changeFilterState = useCallback(
+    ({ target: { value } }) => {
+      setFilter(value);
+    },
+    [setFilter]
+  );
 
   const filterItemsByName = () => {
     if (!filter) {
@@ -71,9 +77,12 @@ const App = () => {
     return newItems;
   };
 
-  const deleteContact = (id) => {
-    setContacts((prevState) => [...prevState.filter((el) => el.id !== id)]);
-  };
+  const deleteContact = useCallback(
+    (id) => {
+      setContacts((prevState) => [...prevState.filter((el) => el.id !== id)]);
+    },
+    [setContacts]
+  );
 
   return (
     <div className="container">
